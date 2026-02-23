@@ -95,7 +95,6 @@ sub readbof {
 	$msg = iff( ($3 eq $null || $3 eq ""), "Tasked beacon to run $2 BOF", $3);
 	$msg = iff( ($ttp ne $null && $ttp ne ""), $msg . " (" . $ttp . ")", $msg);
 	# announce what we're doing
-	blog($1, $msg);
 	btask($1, $msg, $ttp);
 	return $data;
 }
