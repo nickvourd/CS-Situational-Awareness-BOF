@@ -1591,7 +1591,7 @@ Summary: This command enumerates the certificate authorities and certificate
          well as the CA cert, flags, permissions, and similar information for
          the templates.
 Usage:   adcs_enum_com2
-"
+",
 "bof"
 );
 
