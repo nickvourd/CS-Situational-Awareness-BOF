@@ -22,7 +22,7 @@ Realistically, this could be compressed into a helper script, but those steps we
 |adv_audit_policies | adv_audit_policies| Retrieve advanced security audit policies|
 |arp | arp| List ARP table|
 |cacls|cacls [filepath]| List user permissions for the specified file, wildcards supported|
-|cat| cat [filepath] | Return the content of the selected text file. |
+|cat| cat [filepath] | Return the content of the selected text file |
 |dir| dir [directory] [/s]| List files in a directory. Supports wildcards (e.g. "C:\Windows\S*") unlike the CobaltStrike `ls` command|
 |driversigs| driversigs| Enumerate installed services Imagepaths to check the signing cert against known AV/EDR vendors|
 |enum_filter_driver| enum_filter_driver [opt:computer]| Enumerate filter drivers|
