@@ -1906,3 +1906,29 @@ beacon_command_register(
 	"Usage: sha1 <filename>",
 	"bof"
 );
+
+alias cat {
+    local('$data $filename $args');
+
+    if (size(@_) == 2)
+    {
+        $filename = $2;
+    }
+    else
+    {
+        berror($1, "Invalid usage");
+        berror($1, beacon_command_detail("cat"));
+        return;
+    }
+
+    $data = readbof($1, "cat");
+    $args = bof_pack($1, "z", $filename);
+    beacon_inline_execute($1, $data, "go", $args);
+}
+
+beacon_command_register(
+    "cat",
+    "Returns the content of the selected text file.",
+    "Usage: cat <filepath>",
+    "bof"
+);
