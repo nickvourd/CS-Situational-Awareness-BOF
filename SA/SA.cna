@@ -1932,3 +1932,28 @@ beacon_command_register(
     "Usage: cat <filepath>",
     "bof"
 );
+
+alias vol {
+	local('$barch $handle $data $args');
+ 
+	if (size(@_) == 1) {
+		# No drive letter supplied — pass empty string; BOF defaults to CWD drive
+		$args = bof_pack($1, "z", "");
+	} else if (size(@_) == 2) {
+		$args = bof_pack($1, "z", $2);
+	} else {
+		berror($1, "Invalid usage");
+		berror($1, beacon_command_detail("vol"));
+		return;
+	}
+ 
+	$data = readbof($1, "vol");
+	beacon_inline_execute($1, $data, "go", $args);
+}
+ 
+beacon_command_register(
+	"vol",
+	"Displays the volume label and serial number of a drive.",
+	"Usage: vol [drive letter]\n\nExamples:\n  vol        (uses current working directory drive)\n  vol C\n  vol D",
+	"bof"
+);

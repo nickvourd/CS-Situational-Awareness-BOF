@@ -79,6 +79,7 @@ Realistically, this could be compressed into a helper script, but those steps we
 |tasklist| tasklist [opt: server]| List running processes including PID, PPID, and ComandLine (uses wmi)|
 |uptime| uptime| List system boot time and how long it has been running|
 |useridletime| useridletime| Shows how long the user as been idle, displayed in seconds, minutes, hours and days.|
+| vol | vol [opt: driver] | Display the serial number of the specified drive |
 |vssenum| vssenum [hostname] [opt:sharename]| Enumerate Shadow Copies on some Server 2012+ servers|
 |whoami| whoami| List whoami /all|
 |windowlist| windowlist [opt:all]| List visible windows in the current user session|
