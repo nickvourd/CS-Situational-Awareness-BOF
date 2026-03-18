@@ -55,7 +55,7 @@ Realistically, this could be compressed into a helper script, but those steps we
 |netuptime| netuptime [hostname]| Return information about the boot time on the local or remote computer|
 |netuser| netuser [username] [opt: domain]| Get info about specific user. Pull from domain if a domainname is specified|
 |netuse_add| netuse_add [sharename] [opt:username] [opt:password] [opt:/DEVICE:devicename] [opt:/PERSIST] [opt:/REQUIREPRIVACY]| Bind a new connection to a remote computer|
-|netuse_delete| netuse_delete [device\|\|sharename] [opt:/PERSIST] [opt:/FORCE]| Delete the bound device / sharename]|
+|netuse_delete| netuse_delete [device\|\|sharename] [opt:/PERSIST] [opt:/FORCE]| Delete the bound device / sharename |
 |netuse_list| netuse_list [opt:target]| List all bound share resources or info about target local resource|
 |netview| netview| List reachable computers in the current domain|
 |nslookup| nslookup [hostname] [opt:dns server] [opt: record type]| Make a DNS query.<br/>  DNS server is the server you want to query (do not specify or 0 for default) <br/>record type is something like A, AAAA, or ANY. Some situations are limited due to observed crashes|
@@ -78,7 +78,7 @@ Realistically, this could be compressed into a helper script, but those steps we
 |sha256 | sha256 [filename] | Hash filename using sha256 |
 |tasklist| tasklist [opt: server]| List running processes including PID, PPID, and ComandLine (uses wmi)|
 |uptime| uptime| List system boot time and how long it has been running|
-|useridletime| useridletime| Shows how long the user as been idle, displayed in seconds, minutes, hours and days.|
+|useridletime| useridletime| Shows how long the user as been idle, displayed in seconds, minutes, hours and days|
 | vol | vol [opt: driver] | Display the volume label and serial number of a specified drive |
 |vssenum| vssenum [hostname] [opt:sharename]| Enumerate Shadow Copies on some Server 2012+ servers|
 |whoami| whoami| List whoami /all|
