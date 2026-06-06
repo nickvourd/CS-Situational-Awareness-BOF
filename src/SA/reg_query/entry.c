@@ -47,6 +47,26 @@ void set_hive_name(DWORD h)
     }
 }
 
+BOOL Reg_OpenLocalRoot(HKEY hivekey, HKEY *rootkey, BOOL *mustClose)
+{
+    DWORD hive = (DWORD)(ULONG_PTR)hivekey;
+
+    *rootkey = NULL;
+    *mustClose = FALSE;
+
+    if (hive == 0x80000001) { // HKEY_CURRENT_USER
+        if (ADVAPI32$RegOpenCurrentUser(KEY_READ, rootkey) != ERROR_SUCCESS) {
+            return FALSE;
+        }
+
+        *mustClose = TRUE;
+        return TRUE;
+    }
+
+    *rootkey = hivekey;
+    return TRUE;
+}
+
 pregkeyval init_regkey(const char * curpath, DWORD dwcurpathsz, const char * childkey, DWORD dwchildkeysz, HKEY hreg)
 {
     pregkeyval item = (pregkeyval)intAlloc(sizeof(regkeyval));
@@ -145,9 +165,26 @@ DWORD Reg_GetValue(const char * hostname, HKEY hivekey, DWORD Arch, const char* 
     DWORD size = 0;
 	if(hostname == NULL)
 	{
-		dwRet = ADVAPI32$RegOpenKeyExA(hivekey, keystring, 0, KEY_READ, &key);
+        // Old context
+		// dwRet = ADVAPI32$RegOpenKeyExA(hivekey, keystring, 0, KEY_READ, &key);
 
-		if(dwRet){ goto END;}
+		// if(dwRet){ goto END;}
+
+        HKEY LocalRoot = NULL;
+        BOOL closeLocalRoot = FALSE;
+
+        if (!Reg_OpenLocalRoot(hivekey, &LocalRoot, &closeLocalRoot)) {
+            dwRet = ERROR_ACCESS_DENIED;
+            goto END;
+        }
+
+        dwRet = ADVAPI32$RegOpenKeyExA(LocalRoot, keystring, 0, KEY_READ, &key);
+
+        if (closeLocalRoot && LocalRoot) {
+            ADVAPI32$RegCloseKey(LocalRoot);
+        }
+
+        if(dwRet){ goto END;}
 	}
 	else
 	{
@@ -233,9 +270,26 @@ DWORD Reg_EnumKey(const char * hostname, HKEY hivekey, DWORD Arch, const char* k
     //char * fullkeyname = NULL;
 	if(hostname == NULL)
 	{
-		dwresult = ADVAPI32$RegOpenKeyExA(hivekey, keystring, 0, KEY_READ, &rootkey);
+        // Old context
+		// dwresult = ADVAPI32$RegOpenKeyExA(hivekey, keystring, 0, KEY_READ, &rootkey);
 
-		if(dwresult){ goto END;}
+		// if(dwresult){ goto END;}
+        
+        HKEY LocalRoot = NULL;
+        BOOL closeLocalRoot = FALSE;
+
+        if (!Reg_OpenLocalRoot(hivekey, &LocalRoot, &closeLocalRoot)) {
+            dwresult = ERROR_ACCESS_DENIED;
+            goto END;
+        }
+
+        dwresult = ADVAPI32$RegOpenKeyExA(LocalRoot, keystring, 0, KEY_READ, &rootkey);
+
+        if (closeLocalRoot && LocalRoot) {
+            ADVAPI32$RegCloseKey(LocalRoot);
+        }
+
+        if(dwresult){ goto END;}
 	}
 	else
 	{

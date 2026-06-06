@@ -298,6 +298,7 @@ WINIMPM WINBOOL WINAPI ADVAPI32$CryptDestroyHash (HCRYPTHASH hHash);
 WINBASEAPI LONG WINAPI ADVAPI32$RegGetKeySecurity(HKEY hKey, SECURITY_INFORMATION SecurityInformation, PSECURITY_DESCRIPTOR pSecurityDescriptor, LPDWORD lpcbSecurityDescriptor);
 WINBASEAPI LONG WINAPI ADVAPI32$RegSetKeySecurity(HKEY hKey, SECURITY_INFORMATION SecurityInformation, PSECURITY_DESCRIPTOR pSecurityDescriptor);
 WINBASEAPI DWORD WINAPI ADVAPI32$SetEntriesInAclA(ULONG cCountOfExplicitEntries, PEXPLICIT_ACCESS_A pListOfExplicitEntries, PACL OldAcl, PACL *NewAcl);
+WINADVAPI LONG WINAPI ADVAPI32$RegOpenCurrentUser(REGSAM samDesired, PHKEY phkResult);
 
 
 //NTDLL
@@ -750,6 +751,7 @@ DECLSPEC_IMPORT WINBOOL WINAPI VERSION$VerQueryValueA(LPCVOID pBlock, LPCSTR lpS
 #define ADVAPI32$ControlService ControlService
 #define ADVAPI32$EnumDependentServicesA EnumDependentServicesA
 #define ADVAPI32$RegQueryInfoKeyA RegQueryInfoKeyA
+#define ADVAPI32$RegOpenCurrentUser RegOpenCurrentUser
 #define NTDLL$NtCreateFile NtCreateFile
 #define NTDLL$NtClose NtClose
 #define NTDLL$NtFsControlFile NtFsControlFile
