@@ -20,6 +20,7 @@
 #include <security.h>
 #include <aclapi.h>
 #include <bcrypt.h>
+
 //KERNEL32
 #ifdef BOF
 WINBASEAPI void* WINAPI KERNEL32$VirtualAlloc(LPVOID lpAddress, SIZE_T dwSize, DWORD flAllocationType, DWORD flProtect);
@@ -474,6 +475,8 @@ WINLDAPAPI VOID LDAPAPI WLDAP32$ldap_memfree(PCHAR);
 WINLDAPAPI ULONG LDAPAPI WLDAP32$ldap_unbind(LDAP*);
 WINLDAPAPI ULONG LDAPAPI WLDAP32$ldap_unbind_s(LDAP*);
 WINLDAPAPI ULONG LDAPAPI WLDAP32$ldap_msgfree(LDAPMessage*);
+WINLDAPAPI ULONG LDAPAPI WLDAP32$ldap_search_ext_s(LDAP* ld, const PSTR base, ULONG scope, const PSTR filter, PZPSTR attrs, ULONG attrsonly, PLDAPControlA* serverctrls, PLDAPControlA* clientctrls, LDAP_TIMEVAL* timeout, ULONG sizelimit, PLDAPMessage* res);
+WINLDAPAPI ULONG LDAPAPI WLDAP32$ldap_create_page_controlA(LDAP* ExternalHandle, ULONG PageSize, struct berval* Cookie, UCHAR CriticalityValue, PLDAPControlA* Control);
 
 DECLSPEC_IMPORT LDAP* LDAPAPI WLDAP32$ldap_initW(const PWSTR HostName, ULONG PortNumber);
 DECLSPEC_IMPORT ULONG LDAPAPI WLDAP32$ldap_connect(LDAP* ld, LDAP_TIMEVAL* timeout);
@@ -495,10 +498,7 @@ DECLSPEC_IMPORT WINBOOL WINAPI VERSION$GetFileVersionInfoA(LPCSTR lptstrFilename
 DECLSPEC_IMPORT WINBOOL WINAPI VERSION$VerQueryValueA(LPCVOID pBlock, LPCSTR lpSubBlock, LPVOID* lplpBuffer, PUINT puLen);
 
 
-
-
 #else
-
 
 #define intAlloc(size) KERNEL32$HeapAlloc(KERNEL32$GetProcessHeap(), HEAP_ZERO_MEMORY, size)
 #define intRealloc(ptr, size) (ptr) ? KERNEL32$HeapReAlloc(KERNEL32$GetProcessHeap(), HEAP_ZERO_MEMORY, ptr, size) : KERNEL32$HeapAlloc(KERNEL32$GetProcessHeap(), HEAP_ZERO_MEMORY, size)
@@ -876,4 +876,11 @@ DECLSPEC_IMPORT WINBOOL WINAPI VERSION$VerQueryValueA(LPCVOID pBlock, LPCSTR lpS
 #define VERSION$VerQueryValueA VerQueryValueA
 #define BeaconPrintf(x, y, ...) printf(y, ##__VA_ARGS__)
 #define internal_printf printf
+#endif
+
+#ifdef BOF
+// LDAP Control OIDs
+#define LDAP_CONTROL_PAGE_OID_STRING "1.2.840.113556.1.4.319"
+#define LDAP_CONTROL_SHOW_DELETED_OID_STRING "1.2.840.113556.1.4.417"
+#define LDAP_MATCHING_RULE_IN_CHAIN_OID_STRING "1.2.840.113556.1.4.1941"
 #endif

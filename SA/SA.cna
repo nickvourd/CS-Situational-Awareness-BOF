@@ -1968,3 +1968,14 @@ beacon_command_register(
 	"adrbstatus - Check the status of Active Directory Recycling Bin in the current domain\n\nUsage: adrbstatus\n",
 	"bof"
 );
+
+alias adrbperms {
+	beacon_inline_execute($1, readbof($1, "adrbperms", $null), "go");
+}
+
+beacon_command_register(
+	"adrbperms",
+	"Check if current user has read access to Active Directory Recycling Bin",
+	"adrbperms - Check if current user has read access to Active Directory Recycling Bin\n\nUses two methods: direct object search and IN_CHAIN group membership check\n\nUsage: adrbperms\n",
+	"bof"
+);
