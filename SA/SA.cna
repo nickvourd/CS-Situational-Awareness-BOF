@@ -1979,3 +1979,14 @@ beacon_command_register(
 	"adrbperms - Check if current user has read access to Active Directory Recycling Bin\n\nUses two methods: direct object search and IN_CHAIN group membership check\n\nUsage: adrbperms\n",
 	"bof"
 );
+
+alias adrblist {
+	beacon_inline_execute($1, readbof($1, "adrblist", $null), "go");
+}
+
+beacon_command_register(
+	"adrblist",
+	"Enumerate deleted objects in Active Directory Recycling Bin",
+	"adrblist - List all deleted objects from ADRB\n\nUsage: adrblist\n\nDescription:\n    Enumerates all deleted objects in the Active Directory Recycling Bin.\n    Displays object name, SAM account name, type, and deletion timestamp.\n    Requires read access to ADRB (DA/EA/Administrators or delegated permissions).\n",
+	"bof"
+);

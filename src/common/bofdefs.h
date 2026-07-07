@@ -477,6 +477,7 @@ WINLDAPAPI ULONG LDAPAPI WLDAP32$ldap_unbind_s(LDAP*);
 WINLDAPAPI ULONG LDAPAPI WLDAP32$ldap_msgfree(LDAPMessage*);
 WINLDAPAPI ULONG LDAPAPI WLDAP32$ldap_search_ext_s(LDAP* ld, const PSTR base, ULONG scope, const PSTR filter, PZPSTR attrs, ULONG attrsonly, PLDAPControlA* serverctrls, PLDAPControlA* clientctrls, LDAP_TIMEVAL* timeout, ULONG sizelimit, PLDAPMessage* res);
 WINLDAPAPI ULONG LDAPAPI WLDAP32$ldap_create_page_controlA(LDAP* ExternalHandle, ULONG PageSize, struct berval* Cookie, UCHAR CriticalityValue, PLDAPControlA* Control);
+WINLDAPAPI PCHAR LDAPAPI WLDAP32$ldap_get_dn(LDAP* ld, LDAPMessage* entry);
 
 DECLSPEC_IMPORT LDAP* LDAPAPI WLDAP32$ldap_initW(const PWSTR HostName, ULONG PortNumber);
 DECLSPEC_IMPORT ULONG LDAPAPI WLDAP32$ldap_connect(LDAP* ld, LDAP_TIMEVAL* timeout);
