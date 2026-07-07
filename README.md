@@ -18,7 +18,10 @@ Realistically, this could be compressed into a helper script, but those steps we
 |--------|-----|-----|
 |adcs_enum | adcs_enum| Enumerate CAs and templates in the AD using Win32 functions|
 |adcs_enum_com | adcs_enum_com| Enumerate CAs and templates in the AD using ICertConfig COM object|
-|adcs_enum_com2 | adcs_enum_com2| Enumerate CAs and templates in the AD using IX509PolicyServerListManager COM object|
+|adcs_enum_com2 | adcs_enum_com2| Enumerate CAs and templates in the AD using IX509PolicyServerListManager COM object| 
+| adrbperms | adrbperms | Check if current user has read access to Active Directory Recycling Bin |
+| adrbstatus | adrbstatus | Check the status (Enabled/Disabled) of Active Directory Recycling Bin in the current domain |
+| adrblist | adrblist | Enumerate all deleted objects in the Active Directory Recycling Bin |
 |adv_audit_policies | adv_audit_policies| Retrieve advanced security audit policies|
 |arp | arp| List ARP table|
 |cacls|cacls [filepath]| List user permissions for the specified file, wildcards supported|
