@@ -1957,3 +1957,14 @@ beacon_command_register(
 	"Usage: vol [drive letter]\n\nExamples:\n  vol        (uses current working directory drive)\n  vol C\n  vol D",
 	"bof"
 );
+
+alias adrbstatus {
+	beacon_inline_execute($1, readbof($1, "adrbstatus", $null), "go");
+}
+
+beacon_command_register(
+	"adrbstatus",
+	"Check if Active Directory Recycling Bin (ADRB) is enabled",
+	"adrbstatus - Check the status of Active Directory Recycling Bin in the current domain\n\nUsage: adrbstatus\n",
+	"bof"
+);
