@@ -20,6 +20,7 @@
 #include <security.h>
 #include <aclapi.h>
 #include <bcrypt.h>
+#define HKCU_LOCAL_IMP (HKEY)4
 //KERNEL32
 #ifdef BOF
 WINBASEAPI void* WINAPI KERNEL32$VirtualAlloc(LPVOID lpAddress, SIZE_T dwSize, DWORD flAllocationType, DWORD flProtect);
