@@ -11,7 +11,6 @@ void vol(PCHAR args, ULONG length)
     wchar_t drivePath[8]  = {0};   
     wchar_t volumeName[MAX_PATH] = {0};
     DWORD   serialNumber  = 0;
-    char   *volumeNameUtf8 = NULL;
 
   
     BeaconDataParse(&parser, args, length);
@@ -57,12 +56,10 @@ void vol(PCHAR args, ULONG length)
         return;
     }
 
-    volumeNameUtf8 = Utf16ToUtf8(volumeName);
-
-    if (volumeNameUtf8 && volumeNameUtf8[0] != '\0')
+    if (volumeName[0] != L'\0')
     {
-        internal_printf(" Volume in drive %c is %s\n",
-            driveLetter, volumeNameUtf8);
+        internal_printf(" Volume in drive %c is %ls\n",
+            driveLetter, volumeName);
     }
     else
     {
@@ -73,13 +70,6 @@ void vol(PCHAR args, ULONG length)
     internal_printf(" Volume Serial Number is %04X-%04X\n",
         (serialNumber >> 16) & 0xFFFF,
         serialNumber         & 0xFFFF);
-
-
-    if (volumeNameUtf8)
-    {
-        intFree(volumeNameUtf8);
-        volumeNameUtf8 = NULL;
-    }
 }
 
 VOID go(
