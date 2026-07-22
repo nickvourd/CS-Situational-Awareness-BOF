@@ -260,15 +260,25 @@ ULONG ListDeletedObjects(LDAP* ld, char* rootDN) {
 
 	if (ldapErr != LDAP_SUCCESS) {
 		internal_printf("[-] Search failed (LDAP error: %lu)\n", ldapErr);
+		internal_printf("[*] Typically requires Domain Admin or Enterprise Admin privileges.\n");
 		return 0;
 	}
 
 	if (!res) {
 		internal_printf("[*] No results returned\n");
+		internal_printf("[*] Typically requires Domain Admin or Enterprise Admin privileges.\n");
 		return 0;
 	}
 
 	entryCount = WLDAP32$ldap_count_entries(ld, res);
+	
+	if (entryCount == 0) {
+		internal_printf("[*] No deleted objects found!\n");
+		internal_printf("[*] ADRB is empty or the user does not have the required privileges to read it!\n");
+		WLDAP32$ldap_msgfree(res);
+		return 0;
+	}
+
 	internal_printf("[+] Found %lu deleted object(s)\n\n", entryCount);
 
 	// Allocate large buffers once before loop to avoid stack overflow
@@ -401,6 +411,7 @@ VOID go(
 
 	LDAP* ld = NULL;
 	char* rootDN = NULL;
+	ULONG result = 0;
 
 	internal_printf("[*] Enumerating Active Directory Recycling Bin objects...\n");
 
@@ -426,7 +437,7 @@ VOID go(
 
 	internal_printf("[+] Root DN: %s\n", rootDN);
 
-	ListDeletedObjects(ld, rootDN);
+	result = ListDeletedObjects(ld, rootDN);
 
 cleanup:
 	if (rootDN) {
@@ -444,6 +455,7 @@ cleanup:
 int main() {
 	LDAP* ld = NULL;
 	char* rootDN = NULL;
+	ULONG result = 0;
 
 	printf("[*] Enumerating Active Directory Recycling Bin objects...\n");
 
@@ -465,7 +477,7 @@ int main() {
 
 	if (GetRootDN(ld, &rootDN)) {
 		printf("[+] Root DN: %s\n", rootDN);
-		ListDeletedObjects(ld, rootDN);
+		result = ListDeletedObjects(ld, rootDN);
 		free(rootDN);
 	}
 

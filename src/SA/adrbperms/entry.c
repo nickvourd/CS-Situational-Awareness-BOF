@@ -34,36 +34,6 @@ BOOL GetRootDN(LDAP* ld, char** rootDN) {
 	return TRUE;
 }
 
-
-BOOL CheckPrivilegedGroupMembership(LDAP* ld, char* rootDN) {
-	LDAPMessage* res = NULL;
-	char filter[512] = {0};
-	char* attrs[] = { "cn", NULL };
-	char da_dn[256] = {0};
-
-	// Build DN string for Domain Admins
-	MSVCRT$sprintf(da_dn, "CN=Domain Admins,CN=Users,%s", rootDN);
-
-	// Simple search: check if Domain Admins group exists and is accessible
-	internal_printf("[*] Checking Domain Admins accessibility...\n");
-
-	if (WLDAP32$ldap_search_s(ld, da_dn, LDAP_SCOPE_BASE, "(objectClass=*)", attrs, 0, &res) == LDAP_SUCCESS) {
-		if (res) {
-			LDAPMessage* entry = WLDAP32$ldap_first_entry(ld, res);
-			if (entry) {
-				internal_printf("[+] Can access Domain Admins group\n");
-				internal_printf("[+] Current user likely has admin privileges\n");
-				WLDAP32$ldap_msgfree(res);
-				return TRUE;
-			}
-			WLDAP32$ldap_msgfree(res);
-		}
-	}
-
-	internal_printf("[-] Cannot access admin groups\n");
-	return FALSE;
-}
-
 BOOL CheckDeletedObjectsAccess(LDAP* ld, char* rootDN) {
 	LDAPMessage* res = NULL;
 	char searchDN[256] = {0};
@@ -76,13 +46,13 @@ BOOL CheckDeletedObjectsAccess(LDAP* ld, char* rootDN) {
 	MSVCRT$sprintf(searchDN, "CN=Deleted Objects,%s", rootDN);
 	internal_printf("[*] Searching for deleted objects: %s\n", searchDN);
 
-	// Setup SHOW_DELETED control to access deleted objects
+	// Setup SHOW_DELETED control
 	showDeletedControl.ldctl_oid = (PCHAR)LDAP_CONTROL_SHOW_DELETED_OID_STRING;
 	showDeletedControl.ldctl_iscritical = FALSE;
 	showDeletedControl.ldctl_value.bv_len = 0;
 	showDeletedControl.ldctl_value.bv_val = NULL;
 
-	// Set timeout to 10 seconds (avoid immediate timeout)
+	// Set timeout to 10 seconds
 	timeout.tv_sec = 10;
 	timeout.tv_usec = 0;
 
@@ -106,23 +76,21 @@ BOOL CheckDeletedObjectsAccess(LDAP* ld, char* rootDN) {
 			LDAPMessage* entry = WLDAP32$ldap_first_entry(ld, res);
 			if (entry) {
 				internal_printf("[+] Found deleted object(s)\n");
-				internal_printf("[+] User has direct read access to ADRB\n");
 				WLDAP32$ldap_msgfree(res);
 				return TRUE;
 			}
 			WLDAP32$ldap_msgfree(res);
 		}
-
-		// Search succeeded but no entries - ADRB may be empty
-		// Fallback to checking privileged group membership
+		// Search succeeded but no entries
 		internal_printf("[*] No deleted objects found (ADRB may be empty)\n");
-		internal_printf("[*] Checking privileged group membership...\n");
-		return CheckPrivilegedGroupMembership(ld, rootDN);
+		internal_printf("[*] Cannot determine access level. Typically requires Domain Admin or Enterprise Admin privileges.\n");
+		return FALSE;
 	}
 
-	// Search failed - try fallback to admin group check
-	internal_printf("[*] Deleted objects search failed (error: %lu), checking admin privileges...\n", ldapErr);
-	return CheckPrivilegedGroupMembership(ld, rootDN);
+	// Search failed - access denied
+	internal_printf("[-] Deleted objects search failed (LDAP error: %lu)\n", ldapErr);
+	internal_printf("[*] Typically requires Domain Admin or Enterprise Admin privileges to access ADRB.\n");
+	return FALSE;
 }
 
 
