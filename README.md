@@ -36,6 +36,7 @@ Realistically, this could be compressed into a helper script, but those steps we
 |get_password_policy| get_password_policy [hostname]| Get target server or domain's configured password policy and lockouts|
 |get_session_info| get_session_info | prints out information related to the current users logon session |
 |ipconfig| ipconfig| List IPv4 address, hostname, and DNS server|
+| hostname | hostname | Show the computer name and fully qualified domain name if the system is domain-joined |
 |ldapsearch| ldapsearch <query> [--attributes] [--count] [--scope] [--hostname] [--dn] [--ldaps] | Execute LDAP searches (NOTE: specify *,ntsecuritydescriptor as attribute parameter if you want all attributes + base64 encoded ACL of the objects, this can then be resolved using BOFHound. Could possibly break pagination, although everything seemed fine during testing.)|
 |ldapsecuritycheck| ldapsecuritycheck [opt:dc]| Check LDAP signing and LDAPS channel binding requirements on domain controllers. Performs authentication tests to detect security configurations. Auto-discovers the DC when omitted and derives the LDAP SPN automatically. Generates Event ID 2889 when LDAP signing is required but not used.|
 |listdns| listdns| List DNS cache entries. Attempt to query and resolve each|

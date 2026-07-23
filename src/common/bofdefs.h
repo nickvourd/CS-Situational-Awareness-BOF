@@ -197,6 +197,7 @@ WINBASEAPI DWORD WINAPI NETAPI32$NetWkstaUserEnum(LMSTR servername, DWORD level,
 WINBASEAPI DWORD WINAPI NETAPI32$NetWkstaGetInfo(LMSTR servername, DWORD level, LPBYTE* bufptr);
 WINBASEAPI DWORD WINAPI NETAPI32$NetStatisticsGet(LMSTR server, LMSTR service, DWORD level, DWORD options, LPBYTE* bufptr);
 WINBASEAPI DWORD WINAPI NETAPI32$NetRemoteTOD(LPCWSTR UncServerName, LPBYTE* BufferPtr);
+WINBASEAPI DWORD WINAPI NETAPI32$NetGetJoinInformation(LPCWSTR lpServer, LPWSTR* lpNameBuffer, DWORD* BufferType);
 
 //mpr
 WINBASEAPI DWORD WINAPI MPR$WNetOpenEnumW(DWORD dwScope, DWORD dwType, DWORD dwUsage, LPNETRESOURCEW lpNetResource, LPHANDLE lphEnum);
@@ -676,6 +677,10 @@ DECLSPEC_IMPORT WINBOOL WINAPI VERSION$VerQueryValueA(LPCVOID pBlock, LPCSTR lpS
 #define NETAPI32$NetSessionEnum NetSessionEnum
 #define NETAPI32$NetGetAadJoinInformation NetGetAadJoinInformation
 #define NETAPI32$NetFreeAadJoinInformation NetFreeAadJoinInformation
+#define NETSETUP_JOIN_STATUS_UNKNOWN 0
+#define NETSETUP_JOIN_STATUS_UNJOINED 1
+#define NETSETUP_JOIN_STATUS_WORKGROUPNAME 2
+#define NETSETUP_JOIN_STATUS_DOMAINNAME 3
 #define MPR$WNetOpenEnumW WNetOpenEnumW
 #define MPR$WNetEnumResourceW WNetEnumResourceW
 #define MPR$WNetCloseEnum WNetCloseEnum

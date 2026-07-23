@@ -1993,3 +1993,14 @@ beacon_command_register(
 	"adrblist - List all deleted objects from ADRB\n\nUsage: adrblist\n\nDescription:\n    Enumerates all deleted objects in the Active Directory Recycling Bin.\n    Displays object name, SAM account name, type, and deletion timestamp.\n    Requires read access to ADRB (DA/EA/Administrators or delegated permissions).\n",
 	"bof"
 );
+
+alias hostname {
+	beacon_inline_execute($1, readbof($1, "hostname", $null), "go");
+}
+
+beacon_command_register(
+	"hostname",
+	"Get hostname and FQDN if domain-joined",
+	"hostname - Get hostname and FQDN if domain-joined\n\nShows the computer name and fully qualified domain name if the system is domain-joined.\n\nUsage: hostname\n",
+	"bof"
+);
