@@ -80,6 +80,7 @@ Realistically, this could be compressed into a helper script, but those steps we
 |schtasksquery| schtasksquery [opt: server] [taskpath]| Query the given task on the local or remote computer|
 | sha1 | sha1 [filename] | Hash filename using sha1 |
 |sha256 | sha256 [filename] | Hash filename using sha256 |
+|sha512 | sha512 [filename] | Hash filename using sha512 |
 |tasklist| tasklist [opt: server]| List running processes including PID, PPID, and ComandLine (uses wmi)|
 |uptime| uptime| List system boot time and how long it has been running|
 |useridletime| useridletime| Shows how long the user as been idle, displayed in seconds, minutes, hours and days|

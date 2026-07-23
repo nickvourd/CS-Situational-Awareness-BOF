@@ -2004,3 +2004,25 @@ beacon_command_register(
 	"hostname - Get hostname and FQDN if domain-joined\n\nShows the computer name and fully qualified domain name if the system is domain-joined.\n\nUsage: hostname\n",
 	"bof"
 );
+
+alias sha512 {
+	local('$barch $handle $data $filename $args');
+    if(size(@_) == 2)
+    {
+        $filename = $2;
+    }else
+    {
+        berror($1, "Inavlid usage");
+        berror($1, beacon_command_detail("sha512"));
+        return;
+    }
+    $data = readbof($1, "sha512");
+    $args = bof_pack($1, "z", $filename);
+    beacon_inline_execute($1, $data, "go", $args);
+}
+beacon_command_register(
+	"sha512", 
+	"Returns the sha512 hash of the selected file for integrity checks.", 
+	"Usage: sha512 <filename>",
+	"bof"
+);
