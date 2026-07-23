@@ -35,7 +35,8 @@ active => 4);
 HKCR => 0,
 HKCU => 1,
 HKLM => 2,
-HKU  => 3);
+HKU  => 3,
+HKCU_LOCAL_IMP => 4);
 #sleep can't handle the actual values... so we'll just add them on the c side :(
 
 %regtypes = %(
@@ -1214,6 +1215,7 @@ beacon_command_register(
 hive should be one of:
 	HKLM
 	HKCU
+	HKCU_LOCAL_IMP (if impersonating a user, reference their HKCU locally)
 	HKU
 	HKCR
 If a value to query is not specified, that one key is enumerated",
@@ -1264,6 +1266,7 @@ beacon_command_register(
 hive should be one of:
 	HKLM
 	HKCU
+	HKCU_LOCAL_IMP (if impersonating a user, reference their HKCU locally)
 	HKU
 	HKCR
 If a value to query is not specified, that one key is enumerated",

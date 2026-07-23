@@ -32,7 +32,10 @@ void set_hive_name(DWORD h)
     if(h == 2)
     {
         gHiveName = "HKEY_LOCAL_MACHINE";
-    }else if (h == 1)
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wint-to-pointer-cast"
+    }else if (h == 1 || (HKEY)h == HKCU_LOCAL_IMP)
+#pragma GCC diagnostic pop
     {
         gHiveName = "HKEY_CURRENT_USER";
     }else if (h == 3)
@@ -145,9 +148,18 @@ DWORD Reg_GetValue(const char * hostname, HKEY hivekey, DWORD Arch, const char* 
     DWORD size = 0;
 	if(hostname == NULL)
 	{
-		dwRet = ADVAPI32$RegOpenKeyExA(hivekey, keystring, 0, KEY_READ, &key);
+        if(hivekey == HKCU_LOCAL_IMP)
+        {
+            dwRet = ADVAPI32$RegOpenCurrentUser(KEY_READ, &RemoteKey); //Reusing this var for LOCAL_IMP
+            if(dwRet){ goto END;}
+            dwRet = ADVAPI32$RegOpenKeyExA(RemoteKey, keystring, 0, KEY_READ, &key);
+        }
+        else
+        {
+		    dwRet = ADVAPI32$RegOpenKeyExA(hivekey, keystring, 0, KEY_READ, &key);
+        }
 
-		if(dwRet){ goto END;}
+        if(dwRet){ goto END;}
 	}
 	else
 	{
@@ -233,9 +245,19 @@ DWORD Reg_EnumKey(const char * hostname, HKEY hivekey, DWORD Arch, const char* k
     //char * fullkeyname = NULL;
 	if(hostname == NULL)
 	{
-		dwresult = ADVAPI32$RegOpenKeyExA(hivekey, keystring, 0, KEY_READ, &rootkey);
+        if(hivekey == HKCU_LOCAL_IMP)
+        {
+            dwresult = ADVAPI32$RegOpenCurrentUser(KEY_READ, &RemoteKey); //Reusing this var for LOCAL_IMP
+            if(dwresult){ goto END;}
+            dwresult = ADVAPI32$RegOpenKeyExA(RemoteKey, keystring, 0, KEY_READ, &rootkey);
+        }
+        else
+        {
+		    dwresult = ADVAPI32$RegOpenKeyExA(hivekey, keystring, 0, KEY_READ, &rootkey);
+        }
 
 		if(dwresult){ goto END;}
+        
 	}
 	else
 	{
@@ -400,7 +422,7 @@ VOID go(
     set_hive_name(t);
     #pragma GCC diagnostic ignored "-Wint-to-pointer-cast"
 	#pragma GCC diagnostic ignored "-Wpointer-to-int-cast"
-	hive = (HKEY)((DWORD) hive + (DWORD)t);
+	hive = ((HKEY)t == HKCU_LOCAL_IMP) ? HKCU_LOCAL_IMP :(HKEY)((DWORD) hive + (DWORD)t);
     #pragma GCC diagnostic pop
 	path = BeaconDataExtract(&parser, NULL);
 	key = BeaconDataExtract(&parser, NULL);
@@ -418,6 +440,11 @@ VOID go(
 	{
 		return;
 	}
+    if(hostname != NULL && hive == HKCU_LOCAL_IMP)
+    {
+        BeaconPrintf(CALLBACK_ERROR, "Refusing to use HKCU_LOCAL_IMP with a remote host");
+        goto end;
+    }
 	if(key)
 	{
 		dwresult = Reg_GetValue(hostname,hive,0,path,key);
@@ -430,6 +457,7 @@ VOID go(
 	{
 		BeaconPrintf(CALLBACK_ERROR, "Failed to query Regkey, error value: %d", dwresult);
 	}
+    end:
 	printoutput(TRUE);
     free_enums();
 };
