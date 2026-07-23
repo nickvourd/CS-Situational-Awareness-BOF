@@ -103,7 +103,7 @@ VOID go(
 									if (domainLen > 0) {
 										wcDomain[domainLen] = L'\0';
 										BeaconPrintf(CALLBACK_OUTPUT, "[+] FQDN: %ls.%ls", wcHostname, wcDomain);
-										BeaconPrintf(CALLBACK_OUTPUT, "[+] Domain: %ls", wcDomain);
+										//BeaconPrintf(CALLBACK_OUTPUT, "[+] Domain: %ls", wcDomain);
 									}
 								}
 
